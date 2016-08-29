@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  skip_before_action :require_login, only: [:index, :new, :create]
+  skip_before_action :require_login, only: [:new, :create]
   # before_action :set_user, only: [:show, :edit, :update, :destroy]
   # skip_before_action :require_login, except: [:destroy]
 
@@ -64,7 +64,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
+      format.html { redirect_to new_user_session_url, notice: 'User was successfully destroyed.' }
       # format.json { head :no_content }
     end
   end
