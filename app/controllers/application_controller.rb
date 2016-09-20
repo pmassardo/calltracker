@@ -7,8 +7,12 @@ class ApplicationController < ActionController::Base
 
   private
 
-    # def not_authenticated
-    #   redirect_to login_path, alert: "Please login first"
-    # end
+  # This will be required when people sign in
+  def require_login
+    if current_user == nil
+      flash[:alert] = "You must be logged in!"
+      redirect_to login_path # redirect to login page
+    end
+  end
 
 end
