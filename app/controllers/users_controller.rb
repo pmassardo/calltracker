@@ -13,7 +13,7 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    @user = User.find(params[:id])
+    set_user
   end
 
   # GET /users/new
@@ -23,7 +23,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    @user = User.find(params[:id])
+    set_user
   end
 
   # POST /users
@@ -31,30 +31,42 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    respond_to do |format|
+    # respond_to do |format|
       if @user.save
 
         auto_login(@user)
-        format.html { redirect_to(:users, notice: 'Welcome ' + @user.email ) }
+
+        go_new_task()
+
+        # format.html { redirect_to(:users, notice: 'Welcome ' + @user.email ) }
       # format.html { redirect_to @user, notice: 'User was successfully created.' }
       # format.json { render :show, status: :created, location: @user }
       else
-        format.html { render :new }
+        respond_to do |format|
+          format.html { render :new }
+        end
         # format.json { render json: @user.errors, status: :unprocessable_entity }
       end
-    end
+    # end
   end
 
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
-        # format.json { render :show, status: :ok, location: @user }
-      else
+    
+    # @user = User.find(params[:id])
+    set_user()
+
+    if @user.update(user_params)
+
+      go_new_task()
+
+      # format.html { redirect_to @user, notice: 'User was successfully updated.' }
+      # format.json { render :show, status: :ok, location: @user }
+    else
+      respond_to do |format|
         format.html { render :edit }
-        # format.json { render json: @user.errors, status: :unprocessable_entity }
+      # format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -62,12 +74,12 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    @user = User.find(params[:id])
-    @user.destroy
-    respond_to do |format|
-      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
-      # format.json { head :no_content }
-    end
+    # @user = User.find(params[:id])
+    # @user.destroy
+    # respond_to do |format|
+    #   format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
+    #   # format.json { head :no_content }
+    # end
   end
 
   private
@@ -76,8 +88,17 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
     end
 
+    def go_new_task
+
+      @roomtask = RoomTask.new()
+
+      # render  :edit
+      redirect_to new_room_task_path(@roomtask)
+
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation)
+      params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name)
     end
 end
