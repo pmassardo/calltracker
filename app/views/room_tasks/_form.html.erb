@@ -1,0 +1,31 @@
+<%= form_for(@roomtask) do |f| %>
+  <% if @roomtask.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@roomtask.errors.count, "error") %> prohibited this user from being saved:</h2>
+      <ul>
+      <% @roomtask.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :room_id %><br>
+    <%= f.collection_select(:room_id, Room.all, :id, :number) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :task_id %><br>
+    <%= f.collection_select(:task_id, Task.all, :id, :name) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :note %><br>
+    <%= f.text_field :note %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
