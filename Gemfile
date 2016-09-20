@@ -32,6 +32,8 @@ gem 'pg'
 # login security
 gem 'sorcery'
 
+gem 'puma', '~> 3.0'
+
 # end - non-default gems
 
 
