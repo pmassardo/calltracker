@@ -9,8 +9,9 @@ class ApplicationController < ActionController::Base
 
   # This will be required when people sign in
   def require_login
-    if current_user == nil
-      flash[:alert] = "You must be logged in!"
+    if ((current_user == nil) || (current_user.role_id == Role.find_by(name: 'inactive').id))
+      logger.debug current_user
+      flash[:notice] = "You must be logged in! Or, you have not been authorized!"
       redirect_to login_path # redirect to login page
     end
   end
