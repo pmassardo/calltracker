@@ -31,10 +31,11 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    # respond_to do |format|
+    @user.role_id = Role.find_by(name: 'inactive').id
+
       if @user.save
 
-        auto_login(@user)
+        # auto_login(@user)
 
         go_new_task()
 
@@ -53,7 +54,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    
+
     # @user = User.find(params[:id])
     set_user()
 
@@ -74,12 +75,43 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
+
+    set_user
+
+    @user.role_id = Role.find_by(name: 'inactive').id
+
+    @user.save
+
     # @user = User.find(params[:id])
     # @user.destroy
     # respond_to do |format|
     #   format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
     #   # format.json { head :no_content }
     # end
+  end
+
+  def role
+
+    # '/users/role/'
+
+    logger.debug params.inspect
+
+    set_user
+
+    @user.role_id = params[:role_id]
+
+    if(@user.save)
+
+      # return the json response
+      render :json => {:success=>true, :status => 201, :message => "Success!" , :other => "role" }
+
+    else
+
+      # return the json response
+      render :json => {errors: message}, :status => 401
+
+    end
+
   end
 
   private
@@ -99,6 +131,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name)
+      params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name, :role_id)
     end
 end
