@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   authenticates_with_sorcery!
-
+  
+  belongs_to :role
   has_many :room_tasks
   has_many :tasks, through: :room_tasks, autosave: true
   has_many :rooms, through: :room_tasks, autosave: true
