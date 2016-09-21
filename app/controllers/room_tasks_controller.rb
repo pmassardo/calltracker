@@ -63,7 +63,6 @@ class RoomTasksController < ApplicationController
   private
 
     def roomtask_params
-      logger.debug params.inspect
       params.require(:room_task).permit(:room_id, :task_id, :start_date, :end_date, :note)
     end
 
