@@ -11,10 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160920112822) do
+ActiveRecord::Schema.define(version: 20160921171534) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "roles", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "room_tasks", force: :cascade do |t|
     t.integer  "user_id"
@@ -54,12 +60,15 @@ ActiveRecord::Schema.define(version: 20160920112822) do
     t.datetime "reset_password_email_sent_at"
     t.string   "first_name"
     t.string   "last_name"
+    t.integer  "role_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", using: :btree
+  add_index "users", ["role_id"], name: "index_users_on_role_id", using: :btree
 
   add_foreign_key "room_tasks", "rooms"
   add_foreign_key "room_tasks", "tasks"
   add_foreign_key "room_tasks", "users"
+  add_foreign_key "users", "roles"
 end
